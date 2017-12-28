@@ -3,21 +3,18 @@
 #include <DHT.h>
 #include <Adafruit_Sensor.h>
 
-#define DHTPIN A1 // pino do dht
+#define DHTPIN A2 // pino do dht
 #define DHTTYPE DHT11 // Temperatura e umidade
 DHT dht(DHTPIN, DHTTYPE); //definir dht com o que foi criado acima
 
 //Temperatura H2O
-#define ONE_WIRE_BUS 3
+#define ONE_WIRE_BUS 2
 OneWire oneWire(ONE_WIRE_BUS);
 
-float tempMin = 999; // Armazena temperaturas minima e maxima
-float tempMax = 0;
- 
 DallasTemperature sensors(&oneWire);
 DeviceAddress sensor1;
 
-int val_umid = A2; // sensor de umidade
+int val_umid = A3; // sensor de umidade
 
 byte electrode_1 = 7; //Pino eletrodo
 byte electrode_2 = 8; //Pino eletrodo
@@ -50,14 +47,7 @@ void loop() {
   sensors.requestTemperatures();
   float tempC = sensors.getTempC(sensor1);
   // Atualizar temperaturas minima e maxima
-  if (tempC < tempMin)
-  {
-    tempMin = tempC;
-  }
-  if (tempC > tempMax)
-  {
-    tempMax = tempC;
-  }
+
 
 
   int umidade_volt = analogRead(val_umid);
@@ -79,15 +69,7 @@ void loop() {
     Serial.print(t);
     Serial.println(" *C");
     Serial.print("Temp C: ");
-    Serial.print(tempC);
-    Serial.print(" Min : ");
-    Serial.print(tempMin);
-    Serial.print(" Max : ");
-    Serial.println(tempMax);
-    Serial.println("Umidade (valor bruto)");
-    Serial.println(umidade_volt);
-    Serial.println("Umidade (%)");
-    Serial.println(umidade);
+    Serial.print(sensors.getTempCByIndex(0));
     Serial.println("Condutividade (V)");
     Serial.println(reading);
   delay(500);

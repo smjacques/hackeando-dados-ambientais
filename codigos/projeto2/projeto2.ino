@@ -1,52 +1,38 @@
-#include <OneWire.h>
+/********************************************************************/
+// First we include the libraries
+#include <OneWire.h> 
 #include <DallasTemperature.h>
- 
-// Porta do pino de sinal do sensor
-#define ONE_WIRE_BUS 3
- 
-// Define uma instancia do oneWire para comunicacao com o sensor
-OneWire oneWire(ONE_WIRE_BUS);
- 
-// Armazena temperaturas minima e maxima
-float tempMin = 999;
-float tempMax = 0;
- 
+/********************************************************************/
+// Data wire is plugged into pin 2 on the Arduino 
+#define ONE_WIRE_BUS 2 
+/********************************************************************/
+// Setup a oneWire instance to communicate with any OneWire devices  
+// (not just Maxim/Dallas temperature ICs) 
+OneWire oneWire(ONE_WIRE_BUS); 
+/********************************************************************/
+// Pass our oneWire reference to Dallas Temperature. 
 DallasTemperature sensors(&oneWire);
-DeviceAddress sensor1;
- 
-void setup(void)
-{
-  Serial.begin(9600);
-  sensors.begin();
-  // Localiza e mostra enderecos dos sensores
-  Serial.println("Localizando sensores DS18B20...");
-  Serial.print("Foram encontrados ");
-  Serial.print(sensors.getDeviceCount(), DEC);
-  Serial.println(" sensores.");
-    Serial.println();
-  
-}
- 
- 
-void loop()
-{
-  // Ler dados do sensor
-  sensors.requestTemperatures();
-  float tempC = sensors.getTempC(sensor1);
-  // Atualizar temperaturas minima e maxima
-  if (tempC < tempMin)
-  {
-    tempMin = tempC;
-  }
-  if (tempC > tempMax)
-  {
-    tempMax = tempC;
-  }
-  // Informar dados no monitor serial
-  Serial.print("Temp C: ");
-  Serial.print(tempC);
-  Serial.print(" Min : ");
-  Serial.print(tempMin);
-  Serial.print(" Max : ");
-  Serial.println(tempMax);
-}
+/********************************************************************/ 
+void setup(void) 
+{ 
+ // start serial port 
+ Serial.begin(9600); 
+ Serial.println("Dallas Temperature IC Control Library Demo"); 
+ // Start up the library 
+ sensors.begin(); 
+} 
+void loop(void) 
+{ 
+ // call sensors.requestTemperatures() to issue a global temperature 
+ // request to all devices on the bus 
+/********************************************************************/
+ Serial.print(" Requesting temperatures..."); 
+ sensors.requestTemperatures(); // Send the command to get temperature readings 
+ Serial.println("DONE"); 
+/********************************************************************/
+ Serial.print("Temperature is: "); 
+ Serial.print(sensors.getTempCByIndex(0)); // Why "byIndex"?  
+   // You can have more than one DS18B20 on the same bus.  
+   // 0 refers to the first IC on the wire 
+   delay(1000); 
+} 

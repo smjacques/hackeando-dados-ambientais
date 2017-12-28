@@ -1,4 +1,5 @@
-#include "DHT.h"
+#include <DHT.h>
+#include <Adafruit_Sensor.h>
 
 #define DHTPIN A1 // pino que estamos conectado
 #define DHTTYPE DHT11 // DHT 11  // Definimos que tipo de sensor vamos usar
@@ -18,14 +19,14 @@ void setup()
 
 void loop() 
 {
-  // O atraso do sensor pode chegar a 2 segundos.
+  // O atraso do sensor DHT11 pode chegar a 2 segundos.
   float h = dht.readHumidity();
   float t = dht.readTemperature();
 
 // testar se retorno é valido, caso contrário algo está errado.
   if (isnan(t) || isnan(h)) 
   {
-    Serial.println("Falha ao ler do DHT");
+    Serial.println(t);
   } 
   else 
   {
